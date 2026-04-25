@@ -24,6 +24,24 @@ use App\Http\Controllers\SettingController;
 |--------------------------------------------------------------------------
 */
 
+Route::get('/test-db', function() {
+    $start = microtime(true);
+    try {
+        \Illuminate\Support\Facades\DB::select('SELECT 1');
+        $end = microtime(true);
+        return response()->json([
+            'status' => 'success',
+            'latency_ms' => round(($end - $start) * 1000, 2),
+            'host' => config('database.connections.mysql.host')
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage()
+        ], 500);
+    }
+});
+
 Route::get('/optimize-app', function() {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
     \Illuminate\Support\Facades\Artisan::call('optimize');
