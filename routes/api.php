@@ -26,8 +26,9 @@ use App\Http\Controllers\SettingController;
 
 Route::get('/optimize-app', function() {
     \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    \Illuminate\Support\Facades\Artisan::call('optimize');
     return response()->json([
-        'message' => 'Laravel optimized successfully!',
+        'message' => 'Laravel FULLY optimized successfully!',
         'output' => \Illuminate\Support\Facades\Artisan::output()
     ]);
 });
