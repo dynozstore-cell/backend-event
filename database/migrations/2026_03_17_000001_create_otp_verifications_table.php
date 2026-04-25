@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('otp_verifications', function (Blueprint $table) {
@@ -18,14 +15,11 @@ return new class extends Migration
             $table->timestamp('expires_at');
             $table->boolean('verified')->default(false);
             $table->timestamps();
-            
+
             $table->index(['email', 'otp']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('otp_verifications');
