@@ -61,4 +61,8 @@ $response = $kernel->handle(
     $request = Request::capture()
 )->send();
 
+// Tambahkan header untuk pantau kecepatan
+$elapsed = microtime(true) - LARAVEL_START;
+header("X-Response-Time: {$elapsed}s");
+
 $kernel->terminate($request, $response);
