@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\KontakEvent;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ReplyContact;
+use Illuminate\Support\Facades\Cache;
 
 class KontakEventController extends Controller
 {
@@ -22,6 +23,7 @@ class KontakEventController extends Controller
             'status' => 'pending'
         ]);
 
+        Cache::forget('kontak_event_all');
         return response()->json([
             'message' => 'Pengajuan event berhasil dikirim',
             'data' => $kontak
@@ -31,7 +33,9 @@ class KontakEventController extends Controller
     // admin melihat semua pengajuan
     public function index()
     {
-        return response()->json(KontakEvent::all(),200);
+        return Cache::remember('kontak_event_all', 600, function() {
+            return KontakEvent::all();
+        });
     }
 
     // admin update status
@@ -57,10 +61,11 @@ class KontakEventController extends Controller
         'replied_at' => $request->replied_at ?? $kontak->replied_at,
     ]);
 
-    return response()->json([
-        'message' => 'Data berhasil diupdate',
-        'data' => $kontak
-    ],200);
+        Cache::forget('kontak_event_all');
+        return response()->json([
+            'message' => 'Data berhasil diupdate',
+            'data' => $kontak
+        ],200);
     }
 
     // admin balas pesan
@@ -94,6 +99,7 @@ class KontakEventController extends Controller
             'status' => 'replied'
         ]);
 
+        Cache::forget('kontak_event_all');
         return response()->json([
             'message' => 'Pesan berhasil dibalas dan email terkirim',
             'data' => $kontak
@@ -113,6 +119,7 @@ class KontakEventController extends Controller
 
         $kontak->delete();
 
+        Cache::forget('kontak_event_all');
         return response()->json([
             'message' => 'Data berhasil dihapus'
         ],200);
