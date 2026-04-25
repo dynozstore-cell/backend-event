@@ -24,6 +24,14 @@ use App\Http\Controllers\SettingController;
 |--------------------------------------------------------------------------
 */
 
+Route::get('/optimize-app', function() {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    return response()->json([
+        'message' => 'Laravel optimized successfully!',
+        'output' => \Illuminate\Support\Facades\Artisan::output()
+    ]);
+});
+
 // ─── Settings Routes ────────────────────────────────────────────────────────
 Route::get('/settings', [SettingController::class, 'index']);
 Route::middleware('auth:sanctum')->group(function () {
