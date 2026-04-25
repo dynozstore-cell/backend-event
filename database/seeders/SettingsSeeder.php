@@ -20,16 +20,16 @@ class SettingsSeeder extends Seeder
             [
                 'id' => 2,
                 'key' => 'homepage_banners',
-                'value' => '[{"id":"banner-9","title":"Festival Budaya","subtitle":"tes...","date":"20 APR 2026","foto_event_url":"http://localhost:8000/event/1776947405.jpg"},{"id":"banner-8","title":"Keamanan Siber","subtitle":"Personal Branding in the Digital Era merupakan seminar yang membahas pentingnya membangun citra diri...","date":"20 APR 2026","foto_event_url":"http://localhost:8000/event/1776947437.jpg"},{"id":"banner-7","title":"Workshop Laravel","subtitle":"sdsdasdwds...","date":"23 APR 2026","foto_event_url":"http://localhost:8000/event/1776947451.jpg"}]',
-                'created_at' => '2026-04-20 07:34:05',
-                'updated_at' => '2026-04-23 05:30:59'
+                'value' => '[{"id":"banner-9","title":"Festival Budaya","subtitle":"tes...","date":"20 APR 2026","foto_event_url":"https://res.cloudinary.com/dvf7vclov/image/upload/f_auto,q_auto/v1745472251/default-event_zpxqzm.jpg"},{"id":"banner-8","title":"Keamanan Siber","subtitle":"Personal Branding in the Digital Era...","date":"20 APR 2026","foto_event_url":"https://res.cloudinary.com/dvf7vclov/image/upload/f_auto,q_auto/v1745472251/default-event_zpxqzm.jpg"},{"id":"banner-7","title":"Workshop Laravel","subtitle":"sdsdasdwds...","date":"23 APR 2026","foto_event_url":"https://res.cloudinary.com/dvf7vclov/image/upload/f_auto,q_auto/v1745472251/default-event_zpxqzm.jpg"}]',
+                'created_at' => '2026-04-20 07:34:03',
+                'updated_at' => '2026-04-20 07:34:03'
             ],
             [
                 'id' => 3,
                 'key' => 'homepage_hero_cards',
-                'value' => '[{"id":"hero-9","title":"Seminar AI","price":"Rp50.000","handle":"@panitia","imageUrl":"http://localhost:8000/event/1776947336.jpg"},{"id":"hero-8","title":"UI/UX Design","price":"Rp75.000","handle":"@panitia","imageUrl":"http://localhost:8000/event/1776947342.jpg"},{"id":"hero-7","title":"Workshop Laravel","price":"Rp150.00","handle":"@panitia","imageUrl":"http://localhost:8000/event/1776947349.jpg"}]',
-                'created_at' => '2026-04-20 07:34:06',
-                'updated_at' => '2026-04-23 05:29:20'
+                'value' => '[{"id":"hero-9","title":"Seminar AI","price":"Rp50.000","handle":"@panitia","imageUrl":"https://res.cloudinary.com/dvf7vclov/image/upload/f_auto,q_auto/v1745472251/default-event_zpxqzm.jpg"},{"id":"hero-8","title":"UI/UX Design","price":"Rp75.000","handle":"@panitia","imageUrl":"https://res.cloudinary.com/dvf7vclov/image/upload/f_auto,q_auto/v1745472251/default-event_zpxqzm.jpg"},{"id":"hero-7","title":"Workshop Laravel","price":"Rp150.00","handle":"@panitia","imageUrl":"https://res.cloudinary.com/dvf7vclov/image/upload/f_auto,q_auto/v1745472251/default-event_zpxqzm.jpg"}]',
+                'created_at' => '2026-04-20 07:34:03',
+                'updated_at' => '2026-04-20 07:34:03'
             ],
         ];
 
