@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use Carbon\Carbon;
 use App\Mail\OTPMail;
 use App\Mail\ResetPasswordMail;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class AuthController extends Controller
 {
@@ -27,7 +28,7 @@ class AuthController extends Controller
             'kategori_pendaftar' => $user->kategori_pendaftar,
             'role'               => $user->role,
             'avatar'             => $user->avatar,
-            'avatarUrl'          => $user->avatar ? url('avatars/' . $user->avatar) : null,
+            'avatarUrl'          => $user->avatar ? (filter_var($user->avatar, FILTER_VALIDATE_URL) ? $user->avatar : url('avatars/' . $user->avatar)) : null,
             'email_verified_at'  => $user->email_verified_at,
         ];
     }
@@ -321,15 +322,8 @@ class AuthController extends Controller
         ];
 
         if ($request->hasFile('avatar')) {
-            // Hapus avatar lama jika ada
-            if ($user->avatar && file_exists(public_path('avatars/' . $user->avatar))) {
-                unlink(public_path('avatars/' . $user->avatar));
-            }
-
-            $file = $request->file('avatar');
-            $filename = time() . '_' . $user->id_user . '.' . $file->getClientOriginalExtension();
-            $file->move(public_path('avatars'), $filename);
-            $updateData['avatar'] = $filename;
+            $uploadedFileUrl = Cloudinary::upload($request->file('avatar')->getRealPath())->getSecurePath();
+            $updateData['avatar'] = $uploadedFileUrl;
         }
 
         $user->update($updateData);

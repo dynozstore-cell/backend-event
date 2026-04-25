@@ -8,6 +8,7 @@ use App\Models\PendaftaranEvent;
 use App\Models\Pembayaran;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class EventController extends Controller
 {
@@ -70,12 +71,10 @@ class EventController extends Controller
             'meeting_link.required_if' => 'Link meeting wajib diisi untuk event online.',
         ]);
 
-        $namaFile = 'default-event.jpg';
+        $fotoUrl = 'https://res.cloudinary.com/dvf7vclov/image/upload/v1745472251/default-event_zpxqzm.jpg';
 
         if ($request->hasFile('foto_event')) {
-            $file = $request->file('foto_event');
-            $namaFile = time().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('event'), $namaFile);
+            $fotoUrl = Cloudinary::upload($request->file('foto_event')->getRealPath())->getSecurePath();
         }
 
         $event = Event::create([
@@ -88,7 +87,7 @@ class EventController extends Controller
             'lokasi' => $request->event_type === 'offline' ? $request->lokasi : null,
             'meeting_link' => $request->event_type === 'online' ? $request->meeting_link : null,
             'harga' => $request->harga ?? 0,
-            'foto_event' => $namaFile,
+            'foto_event' => $fotoUrl,
             'custom_form_schema' => $request->custom_form_schema,
             'metode_pembayaran' => $request->metode_pembayaran,
             'detail_pembayaran' => $request->detail_pembayaran
@@ -133,12 +132,10 @@ class EventController extends Controller
             'meeting_link.required_if' => 'Link meeting wajib diisi untuk event online.',
         ]);
 
-        $namaFile = $event->foto_event ?: 'default-event.jpg';
+        $fotoUrl = $event->foto_event ?: 'https://res.cloudinary.com/dvf7vclov/image/upload/v1745472251/default-event_zpxqzm.jpg';
 
         if ($request->hasFile('foto_event')) {
-            $file = $request->file('foto_event');
-            $namaFile = time().'.'.$file->getClientOriginalExtension();
-            $file->move(public_path('event'), $namaFile);
+            $fotoUrl = Cloudinary::upload($request->file('foto_event')->getRealPath())->getSecurePath();
         }
 
         $event->update([
@@ -150,7 +147,7 @@ class EventController extends Controller
             'lokasi' => ($request->event_type ?? $event->event_type) === 'offline' ? $request->lokasi : null,
             'meeting_link' => ($request->event_type ?? $event->event_type) === 'online' ? $request->meeting_link : null,
             'harga' => $request->harga ?? $event->harga,
-            'foto_event' => $namaFile,
+            'foto_event' => $fotoUrl,
             'custom_form_schema' => $request->custom_form_schema ?? $event->custom_form_schema,
             'metode_pembayaran' => $request->metode_pembayaran ?? $event->metode_pembayaran,
             'detail_pembayaran' => $request->detail_pembayaran ?? $event->detail_pembayaran
