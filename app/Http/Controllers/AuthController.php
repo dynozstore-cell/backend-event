@@ -113,6 +113,9 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
+        $start = microtime(true);
+        \Illuminate\Support\Facades\Log::info("Login attempt started");
+
         $validated = $request->validate([
             'email'    => ['required', 'string'],
             'password' => ['required', 'string'],
@@ -121,10 +124,11 @@ class AuthController extends Controller
         $loginField = strtolower(trim($validated['email']));
         $password = $validated['password'];
 
-        // Cek login via email atau username
         $user = User::where('email', $loginField)
                     ->orWhere('username', $loginField)
                     ->first();
+        
+        \Illuminate\Support\Facades\Log::info("User lookup finished: " . (microtime(true) - $start));
 
         if (!$user || !Hash::check($password, $user->password)) {
             return response()->json([
@@ -132,13 +136,14 @@ class AuthController extends Controller
             ], 401);
         }
 
-        // Pengecekan OTP/Verifikasi ditiadakan sesuai permintaan
-        // User yang sudah terdaftar bisa langsung masuk jika kredensial benar
+        \Illuminate\Support\Facades\Log::info("Password check finished: " . (microtime(true) - $start));
 
-        // Hapus token lama (opsional, untuk single session)
+        // Hapus token lama
         $user->tokens()->delete();
+        \Illuminate\Support\Facades\Log::info("Old tokens deleted: " . (microtime(true) - $start));
 
         $token = $user->createToken('auth-token')->plainTextToken;
+        \Illuminate\Support\Facades\Log::info("New token created: " . (microtime(true) - $start));
 
         return response()->json([
             'message' => 'Login berhasil',
