@@ -17,6 +17,10 @@ use App\Http\Controllers\PenyelenggaraController;
 use App\Http\Controllers\UploadController;
 use App\Http\Controllers\SettingController;
 
+Route::options('/{any}', function () {
+    return response('', 200);
+})->where('any', '.*');
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
