@@ -17,7 +17,7 @@ use Illuminate\Http\Request;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return response()->json(['status' => 'online', 'message' => 'KESAVENT Backend is running']);
 });
 
 // Authentication Routes

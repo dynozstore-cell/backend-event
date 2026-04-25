@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Setting;
+use Illuminate\Support\Facades\Cache;
 
 class SettingController extends Controller
 {
@@ -11,10 +12,9 @@ class SettingController extends Controller
     {
         $cacheKey = 'api_settings_' . ($request->key ?? 'all');
         
-        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($request) {
+        return Cache::remember($cacheKey, 3600, function () use ($request) {
             if ($request->has('key')) {
-                $setting = Setting::where('key', $request->key)->first();
-                return response()->json($setting)->getData();
+                return Setting::where('key', $request->key)->first();
             }
             return Setting::all()->pluck('value', 'key');
         });
