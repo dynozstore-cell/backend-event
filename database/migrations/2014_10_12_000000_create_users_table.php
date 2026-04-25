@@ -12,7 +12,6 @@ return new class extends Migration
             $table->id('id_user');
             $table->string('nama_lengkap');
             $table->string('email')->unique();
-            $table->string('username')->nullable()->unique();
             $table->string('no_hp');
             $table->string('kategori_pendaftar');
             $table->string('password');
