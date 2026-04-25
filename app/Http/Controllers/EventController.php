@@ -8,6 +8,7 @@ use App\Models\PendaftaranEvent;
 use App\Models\Pembayaran;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class EventController extends Controller
@@ -25,17 +26,19 @@ class EventController extends Controller
     public function index()
     {
         $user = Auth::guard('sanctum')->user();
-        $query = Event::with(['kategori', 'penyelenggara'])->withCount('pendaftaran');
+        $cacheKey = 'events_index_' . ($user ? $user->id_user : 'public');
 
-        // Jika request membawa token dan rolenya penyelenggara, kembalikan hanya event miliknya
-        if ($user && $user->role === 'penyelenggara') {
-            $query->where('user_id', $user->id_user);
-        }
+        return Cache::remember($cacheKey, 600, function () use ($user) {
+            $query = Event::with(['kategori', 'penyelenggara'])->withCount('pendaftaran');
 
-        $events = $query->get()->map(function ($event) {
-            return $this->transformEvent($event);
+            if ($user && $user->role === 'penyelenggara') {
+                $query->where('user_id', $user->id_user);
+            }
+
+            return $query->get()->map(function ($event) {
+                return $this->transformEvent($event);
+            });
         });
-        return response()->json($events, 200);
     }
 
     // READ berdasarkan id
@@ -93,6 +96,7 @@ class EventController extends Controller
             'detail_pembayaran' => $request->detail_pembayaran
         ]);
 
+        Cache::flush();
         return response()->json([
             'message' => 'Event berhasil ditambahkan',
             'data' => $this->transformEvent($event->load('kategori'))
@@ -153,6 +157,7 @@ class EventController extends Controller
             'detail_pembayaran' => $request->detail_pembayaran ?? $event->detail_pembayaran
         ]);
 
+        Cache::flush();
         return response()->json([
             'message' => 'Event berhasil diupdate',
             'data' => $this->transformEvent($event->load('kategori'))

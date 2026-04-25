@@ -9,11 +9,15 @@ class SettingController extends Controller
 {
     public function index(Request $request)
     {
-        if ($request->has('key')) {
-            $setting = Setting::where('key', $request->key)->first();
-            return response()->json($setting);
-        }
-        return response()->json(Setting::all()->pluck('value', 'key'));
+        $cacheKey = 'api_settings_' . ($request->key ?? 'all');
+        
+        return \Illuminate\Support\Facades\Cache::remember($cacheKey, 3600, function () use ($request) {
+            if ($request->has('key')) {
+                $setting = Setting::where('key', $request->key)->first();
+                return response()->json($setting)->getData();
+            }
+            return Setting::all()->pluck('value', 'key');
+        });
     }
 
     public function update(Request $request)
